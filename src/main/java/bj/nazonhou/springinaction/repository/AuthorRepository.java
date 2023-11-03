@@ -9,4 +9,6 @@ public interface AuthorRepository {
   public List<Author> getAuthors();
 
   public Optional<Author> getAuthor(Long id);
+
+  public Author createAuthor(Author author);
 }

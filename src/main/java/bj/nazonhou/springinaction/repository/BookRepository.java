@@ -11,4 +11,6 @@ public interface BookRepository {
   public List<Book> getAuthorBooks(Long authorId);
 
   public Optional<Book> getBook(Long id);
+
+  public Book createBook(Book book);
 }

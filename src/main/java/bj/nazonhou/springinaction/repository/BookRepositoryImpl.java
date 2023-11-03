@@ -2,10 +2,15 @@ package bj.nazonhou.springinaction.repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.core.PreparedStatementCreatorFactory;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
 
 import bj.nazonhou.springinaction.domain.Book;
@@ -46,6 +51,28 @@ public class BookRepositoryImpl implements BookRepository {
 
   private Book getBookFromResultSet(ResultSet resultSet) throws SQLException {
     return new Book(resultSet.getLong("id"), resultSet.getString("name"), resultSet.getLong("author_id"));
+  }
+
+  @Override
+  public Book createBook(Book book) {
+    String sql = "INSERT INTO books (name, author_id) VALUES (?, ?)";
+
+    PreparedStatementCreatorFactory preparedStatementCreatorFactory = new PreparedStatementCreatorFactory(sql,
+        Types.VARCHAR, Types.INTEGER);
+
+    preparedStatementCreatorFactory.setReturnGeneratedKeys(true);
+
+    PreparedStatementCreator preparedStatementCreator = preparedStatementCreatorFactory
+        .newPreparedStatementCreator(Arrays.asList(
+            book.getName(), book.getAuthorId()));
+
+    GeneratedKeyHolder generatedKeyHolder = new GeneratedKeyHolder();
+
+    jdbcTemplate.update(preparedStatementCreator, generatedKeyHolder);
+
+    book.setId(generatedKeyHolder.getKey().longValue());
+
+    return book;
   }
 
 }
