@@ -1,5 +1,6 @@
 package bj.nazonhou.springinaction.controller;
 
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,6 +19,11 @@ public class BookController {
 
   @PostMapping
   public Book createBook(@Valid Book book) {
-    return bookRepository.createBook(book);
+    return bookRepository.save(book);
+  }
+
+  @GetMapping
+  public Iterable<Book> getBooks() {
+    return bookRepository.findAll();
   }
 }

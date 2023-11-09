@@ -1,6 +1,5 @@
 package bj.nazonhou.springinaction.controller;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,17 +20,17 @@ public class AuthorController {
   private final AuthorRepository authorRepository;
 
   @GetMapping
-  public List<Author> getAuthors() {
-    return authorRepository.getAuthors();
+  public Iterable<Author> getAuthors() {
+    return authorRepository.findAll();
   }
 
   @GetMapping(path = "/{id}")
   public Optional<Author> getAuthor(@PathVariable Long id) {
-    return authorRepository.getAuthor(id);
+    return authorRepository.findById(id);
   }
 
   @PostMapping
   public Author createAuthor(@Valid Author author) {
-    return authorRepository.createAuthor(author);
+    return authorRepository.save(author);
   }
 }
